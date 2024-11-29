@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Mượn Sách</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Quản Lý Mượn Sách</h1>
+
+        <!-- Nút thêm giao dịch mượn -->
+        <a href="/borrowings/add" class="btn btn-success mb-3">Thêm Giao Dịch Mượn</a>
+
+        <!-- Form tìm kiếm giao dịch -->
+        <form action="/borrowings" method="GET" class="mb-3">
+            <input type="text" name="search" class="form-control"
+                placeholder="Tìm kiếm theo tên thành viên hoặc sách..." value="<%= search || '' %>">
+            <button type="submit" class="btn btn-primary mt-2">Tìm Kiếm</button>
+        </form>
+
+        <!-- Danh sách giao dịch mượn sách -->
+        <h3 class="my-4">Danh Sách Giao Dịch Mượn</h3>
+        <div class="row">
+            <% if (borrowings.length> 0) { %>
+                <% borrowings.forEach(function(borrowing) { %>
+                    <div class="col-md-4 col-lg-3 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <%= borrowing.book.title %>
+                                </h5>
+                                <p class="card-text text-muted">Thành viên: <%= borrowing.member.name %>
+                                </p>
+                                <p class="card-text text-muted">Ngày mượn: <%= new
+                                        Date(borrowing.borrowedDate).toLocaleDateString('vi-VN') %>
+                                </p>
+                                <p class="card-text text-muted">Ngày trả: <%= borrowing.returnedDate ? new
+                                        Date(borrowing.returnedDate).toLocaleDateString('vi-VN') : 'Chưa trả' %>
+                                </p>
+                                <% if (!borrowing.returnedDate) { %>
+                                    <form action="/borrowings/return/<%= borrowing._id %>" method="POST"
+                                        style="display:inline;">
+                                        <button type="submit" class="btn btn-danger">Đánh dấu là đã trả</button>
+                                    </form>
+                                    <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                        <% } else { %>
+                            <div class="col-12">
+                                <p class="text-center text-muted">Không có giao dịch nào được thực hiện.</p>
+                            </div>
+                            <% } %>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

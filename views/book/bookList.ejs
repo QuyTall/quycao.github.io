@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý sách</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="m-5">
+        <h1 class="text-center mb-4">Danh sách sách</h1>
+
+        <!-- Form tìm kiếm và bộ lọc -->
+        <form action="/books" method="GET">
+            <div class="mb-3 d-flex justify-content-between">
+                <input type="text" name="search" class="form-control me-2" placeholder="Tìm kiếm sách..."
+                    style="width: 70%;" value="<%= typeof search !== 'undefined' ? search : '' %>">
+                <button type="submit" class="btn btn-primary me-2">Tìm kiếm</button>
+                <a href="/books/add" class="btn btn-success">Thêm sách</a>
+            </div>
+            <div class="mb-4 d-flex">
+                <select class="form-select me-2" name="genre">
+                    <option value="">Tất cả thể loại</option>
+                    <option value="fiction" <%=genre==='fiction' ? 'selected' : '' %>>Tiểu thuyết</option>
+                    <option value="non-fiction" <%=genre==='non-fiction' ? 'selected' : '' %>>Phi hư cấu</option>
+                    <option value="science" <%=genre==='science' ? 'selected' : '' %>>Khoa học</option>
+                    <option value="history" <%=genre==='history' ? 'selected' : '' %>>Lịch sử</option>
+                </select>
+
+                <button type="submit" class="btn btn-secondary">Lọc</button>
+            </div>
+        </form>
+
+        <!-- Danh sách sách -->
+        <div class="row">
+            <% if (books.length> 0) { %>
+                <% books.forEach(function(book) { %>
+                    <div class="col-md-4 col-lg-3 mb-4">
+                        <div class="card shadow-sm">
+                            <img src="<%= book.image || '/images/default.png' %>" class="card-img-top"
+                                alt="<%= book.title %>" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <%= book.title %>
+                                </h5>
+                                <p class="card-text text-muted">Tác giả: <%= book.author %>
+                                </p>
+                                <p class="card-text text-muted">Năm xuất bản: <%= book.year %>
+                                </p>
+                                <a href="/books/<%= book._id %>" class="btn btn-primary">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                        <% } else { %>
+                            <div class="col-12">
+                                <p class="text-center text-muted">Không tìm thấy sách nào.</p>
+                            </div>
+                            <% } %>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
